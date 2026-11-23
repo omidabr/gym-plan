@@ -89,6 +89,19 @@ table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:8px 11px;
 .timer[hidden]{display:none}.tlabel{font-size:12px;opacity:.8}.tval{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;min-width:62px}
 .timer button{white-space:nowrap;border:0;border-radius:20px;padding:8px 12px;font:inherit;font-weight:750;background:#ffffff22;color:#fff;cursor:pointer}
 .timer.done{background:#2e8b4a;animation:pulse 1s ease-in-out 3}@keyframes pulse{50%{transform:translateX(-50%) scale(1.06)}}
+.gtcard{display:flex;align-items:center;gap:16px;width:100%;margin:2px 0 12px;padding:16px 18px;border:0;border-radius:18px;background:linear-gradient(115deg,#132b42,#176477);color:#fff;font:inherit;text-align:left;cursor:pointer;box-shadow:0 4px 14px #0003}
+.gtcard:active{transform:scale(.98)}.gtcard .gtico{font-size:46px;line-height:1}.gtcard b{display:block;font-size:22px}.gtcard small{display:block;font-size:13.5px;color:#cfe3ea;margin-top:2px}
+.gtov{position:fixed;inset:0;z-index:80;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:20px;background:#132b42;color:#fff;text-align:center}
+.gtov[hidden]{display:none}.gtov.done{background:#2e8b4a;animation:gtflash 1s ease-in-out 3}@keyframes gtflash{50%{filter:brightness(1.25)}}
+.gtclose{position:absolute;top:14px;right:14px;width:46px;height:46px;border-radius:50%;border:1px solid #ffffff55;background:#ffffff1a;color:#fff;font-size:20px;cursor:pointer}
+.gttitle{font-size:18px;font-weight:750;opacity:.85}
+.gtmodes{display:flex;gap:6px;background:#ffffff1a;border-radius:24px;padding:4px}.gtmodes button{border:0;border-radius:20px;padding:9px 18px;font:inherit;font-weight:750;font-size:15px;background:transparent;color:#fff;cursor:pointer}.gtmodes button.on{background:#fff;color:#132b42}
+.gtval{font-size:clamp(76px,26vw,160px);font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.gtrow{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:420px}.gtrow[hidden]{display:none}
+.gtrow button{border:1px solid #ffffff55;border-radius:22px;padding:11px 16px;font:inherit;font-weight:750;font-size:16px;background:#ffffff1a;color:#fff;cursor:pointer}.gtrow button.on{background:#fff;color:#132b42}
+.gtgo{width:min(320px,80vw);border:0;border-radius:40px;padding:20px;font:inherit;font-weight:800;font-size:26px;background:#fff;color:#132b42;cursor:pointer}
+.gtrst{border:0;background:transparent;color:#fff;font:inherit;font-weight:700;font-size:16px;text-decoration:underline;cursor:pointer;opacity:.85}
+@supports(padding:env(safe-area-inset-top)){.gtov{padding-top:calc(20px + env(safe-area-inset-top));padding-bottom:calc(20px + env(safe-area-inset-bottom))}.gtclose{top:calc(14px + env(safe-area-inset-top))}}
 .modal{position:fixed;inset:0;background:#000e;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.modal img{max-width:95vw;max-height:88vh;object-fit:contain}.modal button{position:absolute;top:14px;right:14px;font-size:20px;background:#fff;border:0;border-radius:30px;padding:8px 15px}
 .printonly{display:none}
 @media(max-width:520px){.frame{height:250px}.row{grid-template-columns:1fr 64px 36px}.tick{width:26px;height:26px}.ticks{max-width:120px}.tabsbar button{font-size:14px}.tabsbar button small{font-size:10.5px}.cal{gap:3px}.cd{font-size:10px;padding:6px 2px}}
@@ -97,7 +110,7 @@ table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:8px 11px;
  @page{size:A4 landscape;margin:10mm}
  :root{--ink:#111;--muted:#444;--line:#ccc;--card:#fff;--bg:#fff;--soft:#f3f3f3;--chip:#eee}
  body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
- header{background:#fff;color:#111;padding:0 0 6px}header p{color:#333}.hbtns,.tabsbar,.today,.infopanel,.timer,.list,.reset,.box.short{display:none!important}
+ header{background:#fff;color:#111;padding:0 0 6px}header p{color:#333}.hbtns,.tabsbar,.today,.infopanel,.timer,.gtcard,.gtov,.list,.reset,.box.short{display:none!important}
  section.day{display:block!important;break-after:page}section.day[data-day="w"]{break-after:auto}
  .daybar{border:0;border-left:6px solid var(--dc);padding:4px 10px;margin-bottom:6px}
  .box.warm{display:block;border:0;padding:0}.box.warm>summary{padding:4px 0;font-size:13px}.box.warm>summary::after{content:""}.box.warm ol{columns:2;font-size:11px}.box.warm li{font-size:11px;margin:2px 0}.box.warm p{display:none}
@@ -409,13 +422,13 @@ label.lkb{display:inline-block}
 <header><div class="hwrap"><div><h1>Three-Day Gym Plan</h1><p>Monday upper · Wednesday lower · Friday upper-focused</p></div>
 <div class="hbtns"><button id="infobtn" type="button" aria-expanded="false" title="How to use">ⓘ</button><button id="pause" type="button" title="Pause animations">⏸</button><button id="print" type="button" title="Printable version">🖨</button></div></div></header>
 <div class="infopanel" id="info" hidden><div class="inner">
-<p><b>Using the page at the gym:</b> it opens on today's session. Tap an exercise to open it and fill in <i>Today's log</i> (kg × reps); last session's numbers are shown as hints and "Same as last time" copies them. Tapping ✓ or a circle marks the set done and starts the rest timer. <i>History</i> shows your progress chart. Your log is saved in this browser on this phone: no sign-in needed. Use Back up log (Week tab) now and then. ★ marks the exercises kept in the 45-minute version.</p>
+<p><b>Using the page at the gym:</b> it opens on today's session. Tap an exercise to open it and fill in <i>Today's log</i> (kg × reps); last session's numbers are shown as hints and "Same as last time" copies them. Tapping ✓ or a circle marks the set done and starts the rest timer. <i>History</i> shows your progress chart. Your log is saved in this browser on this phone: no sign-in needed. Use Back up log (Week tab) now and then. ★ marks the exercises kept in the 45-minute version. The big <b>⏱ Timer</b> button at the top opens a countdown or stopwatch for planks and other holds.</p>
 <p><b>Muscle maps:</b> red = main muscle, orange = strong helper, yellow = smaller role. The % shares are estimates from muscle-activity (EMG) and biomechanics research, meant to show which muscles do most of the work, not exact measurements. Tap <i>Movement</i> for start and finish positions, and 💪 MuscleWiki for a video and detailed how-to (needs internet).</p>
 <p><b>Back and knee:</b> your back is pain-free, so still brace and keep a neutral spine, especially on Romanian deadlifts and the leg press. Your knee sometimes hurts, so keep reps and depth pain-free and skip the leg extension on days it complains. Stop any exercise that brings on pain, and see a professional if it persists or gets worse.</p>
 <p><b>Effort (RIR = reps in reserve):</b> stop most sets with 1–3 good reps left. Last set of arm isolation: 0–1 left. Lunges, chin-ups and the new Romanian deadlift: 2–3 left. <b>Rest:</b> 90 s–2 min after big lifts, 75–90 s for mid-size lifts, about 60 s for isolation (45–60 s for hip machines and core). The timer starts at the short end; tap +30 s if you need more.</p>
 </div></div>
 <nav class="tabsbar" id="tabsbar"><button data-day="1" type="button" style="--dc:#137c8b">Day 1<small>Mon · Upper</small></button><button data-day="2" type="button" style="--dc:#c2770f">Day 2<small>Wed · Lower</small></button><button data-day="3" type="button" style="--dc:#6a4c9c">Day 3<small>Fri · Upper+</small></button><button data-day="w" type="button" style="--dc:#2f4b63">Week<small>sets · cardio</small></button></nav>
-<main class="wrap"><div class="today" id="today"></div>
+<main class="wrap"><button class="gtcard" id="gtopen" type="button"><span class="gtico" aria-hidden="true">⏱</span><span><b>Timer</b><small>Planks, holds and anything else: countdown or stopwatch</small></span></button><div class="today" id="today"></div>
 <section class="day" data-day="1" style="--dc:#137c8b">
 <div class="daybar"><div><div class="dtitle">Day 1 · Monday · Upper</div><div class="dmeta"><span>⏱ ~66 min</span><span>23 working sets</span><span>8 exercises</span></div><div class="focus">Chest · Back · Shoulders · Arms</div></div>
 <button class="reset" type="button" data-day="1">↺ Reset ticks</button></div>
@@ -816,6 +829,7 @@ label.lkb{display:inline-block}
 </section>
 </main>
 <div class="timer" id="timer" hidden><span class="tlabel">Rest</span><span class="tval" id="tval">0:00</span><button type="button" id="tplus">+30 s</button><button type="button" id="tstop">✕</button></div>
+<div class="gtov" id="gt" hidden role="dialog" aria-modal="true" aria-label="Timer"><button type="button" class="gtclose" id="gtclose" aria-label="Close timer">✕</button><div class="gttitle">Plank · holds · anything</div><div class="gtmodes"><button type="button" id="gtm-down" class="on">Countdown</button><button type="button" id="gtm-up">Stopwatch</button></div><div class="gtval" id="gtval">1:00</div><div class="gtrow" id="gtset"><button type="button" data-s="30">0:30</button><button type="button" data-s="45">0:45</button><button type="button" data-s="60">1:00</button><button type="button" data-s="90">1:30</button><button type="button" data-s="120">2:00</button><button type="button" id="gtminus">−15 s</button><button type="button" id="gtplus">+15 s</button></div><button type="button" class="gtgo" id="gtgo">Start</button><button type="button" class="gtrst" id="gtrst">Reset</button></div>
 <script>window.__LOCALONLY=true</script><script>{
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const pad=n=>String(n).padStart(2,'0');
@@ -985,6 +999,43 @@ function stopTimer(){clearInterval(iv);iv=null;$('#timer').hidden=true;}
 $('#tplus').addEventListener('click',()=>{if(!iv) startTimer(30); else {end+=30000;tickT();}});
 $('#tstop').addEventListener('click',stopTimer);
 $$('.timerbtn').forEach(b=>b.addEventListener('click',()=>startTimer(+b.dataset.rest)));
+
+/* ================= general timer (planks, holds, anything) ================= */
+const G={mode:'down',set:60,el:0,st:0,iv:null,done:false,wl:null};
+try{const v=+localStorage.getItem('omidgt:set');if(v>=5&&v<=3600)G.set=v;}catch(e){}
+function gElapsed(){return G.el+(G.iv?Date.now()-G.st:0);}
+function gDraw(){const e=gElapsed()/1000;
+  $('#gtval').textContent=G.done?'Done!':(G.mode==='down'?fmt(G.set-e):Math.floor(e/60)+':'+pad(Math.floor(e)%60));
+  $('#gtgo').textContent=G.iv?'Pause':(G.done?'Restart':(G.el>0?'Resume':'Start'));
+  $('#gtset').hidden=G.mode!=='down';
+  $$('#gtset [data-s]').forEach(b=>b.classList.toggle('on',+b.dataset.s===G.set));
+  $('#gtm-down').classList.toggle('on',G.mode==='down');$('#gtm-up').classList.toggle('on',G.mode==='up');}
+function gTick(){
+  if(G.mode==='down'&&G.set-gElapsed()/1000<=0){clearInterval(G.iv);G.iv=null;G.el=G.set*1000;G.done=true;$('#gt').classList.add('done');
+    try{navigator.vibrate&&navigator.vibrate([250,120,250,120,250]);}catch(e){} beep();}
+  gDraw();}
+async function gWake(){try{if('wakeLock' in navigator&&!G.wl){G.wl=await navigator.wakeLock.request('screen');G.wl.addEventListener('release',()=>{G.wl=null;});}}catch(e){}}
+function gUnwake(){try{if(G.wl){G.wl.release().catch(()=>{});G.wl=null;}}catch(e){}}
+function gReset(){clearInterval(G.iv);G.iv=null;G.el=0;G.done=false;$('#gt').classList.remove('done');gDraw();}
+function gStart(){
+  try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();ac.resume&&ac.resume().catch(()=>{});}catch(e){}
+  if(G.done) gReset();
+  G.st=Date.now();clearInterval(G.iv);G.iv=setInterval(gTick,200);gWake();gTick();}
+function gPause(){G.el=gElapsed();clearInterval(G.iv);G.iv=null;gDraw();}
+function gSetTime(s){G.set=Math.min(3600,Math.max(5,s));try{localStorage.setItem('omidgt:set',String(G.set));}catch(e){}}
+function gOpen(){$('#gt').hidden=false;document.body.style.overflow='hidden';gReset();gWake();$('#gtgo').focus();}
+function gClose(){gReset();gUnwake();$('#gt').hidden=true;document.body.style.overflow='';$('#gtopen').focus();}
+$('#gtopen').addEventListener('click',gOpen);
+$('#gtclose').addEventListener('click',gClose);
+$('#gtgo').addEventListener('click',()=>G.iv?gPause():gStart());
+$('#gtrst').addEventListener('click',gReset);
+$('#gtm-down').addEventListener('click',()=>{G.mode='down';gReset();});
+$('#gtm-up').addEventListener('click',()=>{G.mode='up';gReset();});
+$$('#gtset [data-s]').forEach(b=>b.addEventListener('click',()=>{gSetTime(+b.dataset.s);gReset();}));
+$('#gtminus').addEventListener('click',()=>{gSetTime(G.set-15);G.done?gReset():gDraw();});
+$('#gtplus').addEventListener('click',()=>{gSetTime(G.set+15);G.done?gReset():gDraw();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#gt').hidden) gClose();});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&!$('#gt').hidden){if(G.iv)gTick();gWake();}});
 
 /* ================= header ================= */
 $('#infobtn').addEventListener('click',e=>{const p=$('#info');p.hidden=!p.hidden;e.currentTarget.setAttribute('aria-expanded',String(!p.hidden));});
