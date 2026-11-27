@@ -1,6 +1,6 @@
 // Offline support with instant updates: always try the network first (so a new version shows up
 // right away), and fall back to the copy saved on the phone when offline or the signal is weak.
-const CACHE = 'gym-plan-v4';
+const CACHE = 'gym-plan-v5';
 const FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES.map(u => new Request(u, {cache: 'reload'})))).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
